@@ -40,12 +40,16 @@ def conn():
 
 def select_db(user_tg_name, columns):
     connection = conn()
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """select %s from users_finance_bot where user_tg_id = %s;""", (columns, user_tg_name)
-        )
-        many = cursor.fetchone()
-        print(f'{many} select_db')
+    if columns == 'cash':
+        with connection.cursor() as cursor:
+            sql_update_query = """SELECT cash FROM users_finance_bot WHERE user_tg_id = %s;"""
+            cursor.execute(sql_update_query,(user_tg_name,))
+            many = cursor.fetchone()
+    else:
+        with connection.cursor() as cursor:
+            sql_update_query = """SELECT spend FROM users_finance_bot WHERE user_tg_id = %s;"""
+            cursor.execute(sql_update_query,(user_tg_name,))
+            many = cursor.fetchone()
     return many
 
 
@@ -75,19 +79,22 @@ def spend(message):
     markup = func_markup()
     bot.send_message(message.chat.id,'привет я бот для ведения учета твойх финансов',reply_markup=markup)
     # bot.send_message(message.chat.id, message.from_user.username)
-    add_user_db(message.from_user.username)
+    if message.from_user.username is None:
+        bot.send_message(message.chat.id, 'у вас нет user id в телеграмме')
+    else:
+        add_user_db(message.from_user.username)
 
 
 @bot.message_handler(commands=['balance'])
 def balance(message):
 
-    many_spend = select_db(message.from_user.username, 'spend')
-    many_cash = select_db(message.from_user.username, 'cash')
+    many_spend = select_db(message.from_user.username, 'spend')[0]
+    many_cash = select_db(message.from_user.username, 'cash')[0]
     print(f'{many_cash} balance')
 
-    # bot.reply_to(message, f"Ваш баланс: {many_cash - many_spend},\n"
-    #                       f"вы потратили {many_spend} \n"
-    #                       f"вы заработали {many_cash}")
+    bot.reply_to(message, f"Ваш баланс: {many_cash - many_spend},\n"
+                          f"вы потратили {many_spend} \n"
+                          f"вы заработали {many_cash}")
 
 # Обработчик команды для расходов
 @bot.message_handler(commands=['spend'])

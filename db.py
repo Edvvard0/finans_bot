@@ -44,9 +44,9 @@ try:
     user_tg_id = 'Edward'
     x = 100
     with connection.cursor() as cursor:
-        sql_update_query = """SELECT cash FROM users_finance_bot WHERE user_tg_id = Edward"""
-        cursor.execute(sql_update_query)
-    print(cursor.fetchone())
+        sql_update_query = """SELECT cash FROM users_finance_bot WHERE user_tg_id = %s;"""
+        cursor.execute(sql_update_query,(user_tg_id,))
+        print(cursor.fetchone())
 
 except Exception as _ex:
     print("[INFO] Error while working with PostgreSQL", _ex)
