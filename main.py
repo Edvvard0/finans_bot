@@ -1,20 +1,18 @@
 # import sqlite3
 
 from telebot import types, TeleBot
-
+import psycopg2
+from config import host, user, password, db_name
 
 # Инициализация телеграм бота
 TOKEN = '7382523397:AAE9bCchn84A4ndqpUEME-A6YkmDAR4_V38'
 bot = TeleBot(TOKEN)
 
+
+
+
 expenses = []
 finans = []
-
-#категории
-food = []
-hobby = []
-sport = []
-other = []
 
 
 def func_markup():
