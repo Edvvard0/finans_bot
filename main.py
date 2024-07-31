@@ -90,7 +90,6 @@ def balance(message):
 
     many_spend = select_db(message.from_user.username, 'spend')[0]
     many_cash = select_db(message.from_user.username, 'cash')[0]
-    print(f'{many_cash} balance')
 
     bot.reply_to(message, f"Ваш баланс: {many_cash - many_spend},\n"
                           f"вы потратили {many_spend} \n"
