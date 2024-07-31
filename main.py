@@ -3,9 +3,10 @@
 from telebot import types, TeleBot
 import psycopg2
 from config import host, user, password, db_name
+from tg_token import token
 
 # Инициализация телеграм бота
-TOKEN = '7382523397:AAE9bCchn84A4ndqpUEME-A6YkmDAR4_V38'
+TOKEN = token
 bot = TeleBot(TOKEN)
 
 
