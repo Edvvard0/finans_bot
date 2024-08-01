@@ -17,7 +17,7 @@
 1. **Клонируйте репозиторий**:
 
    
-   >git clone https://github.com/Edvvard0/finans_bot.git
+   ```git clone https://github.com/Edvvard0/finans_bot.git```
 
    
 
@@ -26,12 +26,12 @@
    Убедитесь, что у вас установлен pip, затем выполните:
 
    
-   >pip install -r library.txt
+   ```pip install -r library.txt```
    
 
 3. **Настройте базу данных**:
 
-   Перед запуском бота необходимо создать таблицу в базе данных PostgreSQL. Выполните следующую SQL-команду:
+   Перед запуском бота необходимо создать таблицу в базе данных PostgreSQL. Выполните следующую SQL-команду или запустив скрипт в файле db.py:
 
    ```
    CREATE TABLE users_finance_bot(
