@@ -1,7 +1,8 @@
-# import sqlite3
-
+# подключения внешних библиотек
 from telebot import types, TeleBot
 import psycopg2
+
+# импорт из файлов служебных переменных
 from config import host, user, password, db_name
 from tg_token import token
 
@@ -10,6 +11,7 @@ TOKEN = token
 bot = TeleBot(TOKEN)
 
 
+# Функция для создания 3 кнопок
 def func_markup():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = types.KeyboardButton("/spend")
@@ -20,6 +22,8 @@ def func_markup():
     return markup
 
 
+
+# Функция для проверки данных введенных пользователем
 def verify_many(message, x):
     if not x.isdigit() or x[0]==0:
           bot.send_message(message.chat.id, 'некоректный ввод данных')
@@ -27,8 +31,8 @@ def verify_many(message, x):
     return True
 
 #DATA_BASE
-
 def conn():
+    '''Функция для подклячения к базе данных'''
     connection = psycopg2.connect(
         host=host,
         user=user,
@@ -40,6 +44,8 @@ def conn():
 
 
 def select_db(user_tg_name, columns):
+    '''Функция для получения значений в колонке spend и cash'''
+
     connection = conn()
     if columns == 'cash':
         with connection.cursor() as cursor:
@@ -64,6 +70,7 @@ def add_user_db(user_tg_name):
         )
 
 def update(user_tg_id, amount, flag = True):
+    '''Функция для обновления значений в колонке spend и cash'''
     x = amount
     connection = conn()
     if flag:
@@ -74,6 +81,8 @@ def update(user_tg_id, amount, flag = True):
         with connection.cursor() as cursor:
             sql_update_query = """Update users_finance_bot set spend = spend + %s where user_tg_id = %s"""
             cursor.execute(sql_update_query, (x, user_tg_id))
+
+# /DataBase
 
 @bot.message_handler(commands=['start'])
 def spend(message):
